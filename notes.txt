@@ -1,2 +1,0 @@
-Câu lệnh gửi request và save data vào file routes.json
-curl -H "Accept : application/json+v3" -X GET url -o routes.json 
