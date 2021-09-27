@@ -9,8 +9,8 @@ app.set('view engine', 'pug')
 const route = require('./api/routes/routing.route')
 const geocodeRoute = require('./api/routes/geocode.route')
 
-app.use('/route', route)
-app.use('/geocode', geocodeRoute)
+app.use('/api/route', route)
+app.use('/api/geocode', geocodeRoute)
 
 app.listen(port, () => {
     console.log(`Running on http://localhost:${port}`)
