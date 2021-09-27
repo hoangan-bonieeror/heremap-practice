@@ -66,7 +66,10 @@ const routeInstruction = (result) => {
                 if(actions[j].action === 'arrive') {break;}
             }
         } 
-        result(instruction);
+        const data = {};
+        data.request_id = resp.body.routes[0].id;
+        data.instruction = instruction
+        result(data);
     })
     .catch(function (err) {
         console.log(err)

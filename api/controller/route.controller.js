@@ -1,4 +1,4 @@
-const service = require('../services/service')
+const service = require('../services/routing')
 
 const cal_route = (req,res)=> {
     service.cal_route((data)=> {
@@ -20,7 +20,8 @@ const cal_route_mulvia = (req,res) => {
 
 const routeInstruction = (req,res)=> {
     service.routeInstruction((data)=> {
-      res.json({Instruction : data})
+      res.json({request_id : data.request_id,
+                instruction : data.instruction})
          .status(200)
     })
 }

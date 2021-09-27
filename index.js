@@ -6,10 +6,11 @@ const port = 3000;
 app.set('view engine', 'pug')
 
 
-const route = require('./api/routes/service.route')
-
+const route = require('./api/routes/routing.route')
+const geocodeRoute = require('./api/routes/geocode.route')
 
 app.use('/route', route)
+app.use('/geocode', geocodeRoute)
 
 app.listen(port, () => {
     console.log(`Running on http://localhost:${port}`)
@@ -26,6 +27,7 @@ app.get('/routing',function(req,res){
 app.get('/isoline',(req,res)=> {
   res.render('isoline')
 })
+
 
 
 
