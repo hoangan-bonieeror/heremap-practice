@@ -1,4 +1,5 @@
 var NhaTui = { lat: 10.82397, lng: 106.68567 }
+var nhaChuHuy = {lat: 47.50189, lng: -122.23721}
 var platform = new H.service.Platform({
     'apikey': '0sZtG3y_uHyaTrbiuBIlVp49yk3-8nv0OA4XNKqMmGs'
 });
@@ -12,7 +13,7 @@ var map = new H.Map(
     defaultLayers.vector.normal.map,
     {
         zoom: 20,
-        center: NhaTui
+        center: nhaChuHuy
     });
 
 
@@ -36,24 +37,25 @@ var service = platform.getSearchService();
 // the callback and an error callback function (called if a
 // communication error occurs):
 service.reverseGeocode({
-    at: '10.82397,106.68567'
+    at: '47.50189,-122.23721'
 }, (result) => {
     result.items.forEach((item) => {
         // Assumption: ui is instantiated
         // Create an InfoBubble at the returned location with
         // the address as its contents:
         ui.addBubble(new H.ui.InfoBubble(item.position, {
-            content: "Nhà tui ở " + item.address.label 
+            content: "Nhà chú Huy ở " + item.address.label 
         }));
     });
 }, alert);
 
 
 // service.geocode({
-//     q: 'Hẻm 195 Nguyễn Thái Sơn 195/11, Quận Gò Vấp, Việt Nam'
+//     q: '7621 S 113th St, Seattle, WA 98178, USA'
 //   }, (result) => {
 //     // Add a marker for each location found
 //     result.items.forEach((item) => {
+//         console.log(item.position)
 //       map.addObject(new H.map.Marker(item.position));
 //     });
 //   }, alert);

@@ -1,9 +1,24 @@
 const service = require('../services/routing')
 
 const cal_route = (req,res)=> {
-    service.cal_route((data)=> {
-      res.json({data : data})
-    }, 'scooter')
+    if(req.query.origin && req.query.destination) {
+      const origin = req.query.origin
+      const destination = req.query.destination
+      if(req.query.transport) {
+        const transport = req.query.transport
+        service.cal_route((data)=> {
+          res.json({data : data})
+        }, origin, destination, transport)
+      } else {
+        service.cal_route((data)=> {
+          res.json({data : data})
+        }, origin , destination)
+      }
+    } else {
+      service.cal_route((data)=> {
+        res.json({data : data})
+      })
+    }
 }
 
 const cal_route_via = (req,res)=> {

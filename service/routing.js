@@ -2,6 +2,8 @@ var HoChiMinh = { lat: 10.77642, lng: 106.70111 }
 var Berlin = { lat: 52.53086, lng: 13.38474 }
 var GoVap = { lat: 10.83379, lng: 106.66547 }
 var NhaTui = { lat: 10.82397, lng: 106.68567 }
+var starbuck = {lat : 47.49719, lng : -122.19973}
+var nhaChuHuy = {lat: 47.50189, lng: -122.23721}
 var platform = new H.service.Platform({
   'apikey': '0sZtG3y_uHyaTrbiuBIlVp49yk3-8nv0OA4XNKqMmGs'
 });
@@ -37,9 +39,9 @@ var routingParameters = {
   routingMode: 'fast',
   transportMode: 'pedestrian',
   // The start point of the route:
-  origin: '10.82397,106.68567',
+  origin: '47.50189,-122.23721',
   // The end point of the route:
-  destination: '10.82291,106.69284',
+  destination: '47.49719,-122.19973',
   // Include the route shape in the response
   return: 'polyline'
 };

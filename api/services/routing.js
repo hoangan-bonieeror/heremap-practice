@@ -5,11 +5,11 @@ const papaChicken_via = '10.82543,106.69063'
 const snobCoffee_via = '10.82469,106.69169'
 
 
-const cal_route = async (result,transportMode) => {
+const cal_route = async (result,origin = nhatui,destination = emartSupermarket,transportMode = 'scooter') => {
     if(!transportMode) {
         transportMode = 'car';
     }
-    const url = `https://router.hereapi.com/v8/routes?transportMode=${transportMode}&return=polyline,summary&origin=${nhatui}&destination=${emartSupermarket}&apikey=${process.env.REST_API_KEY}`;
+    const url = `https://router.hereapi.com/v8/routes?transportMode=${transportMode}&return=polyline,summary&origin=${origin}&destination=${destination}&apikey=${process.env.REST_API_KEY}`;
     needle('get', url)
         .then(function (resp) {
             result(resp.body);
