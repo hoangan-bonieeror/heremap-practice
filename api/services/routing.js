@@ -9,7 +9,7 @@ const cal_route = async (result,origin = nhatui,destination = emartSupermarket,t
     if(!transportMode) {
         transportMode = 'car';
     }
-    const url = `https://router.hereapi.com/v8/routes?transportMode=${transportMode}&return=polyline,summary&origin=${origin}&destination=${destination}&apikey=${process.env.REST_API_KEY}`;
+    const url = `${process.env.routing_path}?transportMode=${transportMode}&return=polyline,summary&origin=${origin}&destination=${destination}&apikey=${process.env.REST_API_KEY}`;
     needle('get', url)
         .then(function (resp) {
             result(resp.body);
@@ -27,7 +27,7 @@ const cal_route_via = (result,transportMode,via) => {
     if(!via) {
         via = papaChicken_via;
     }
-    const url = `https://router.hereapi.com/v8/routes?transportMode=${transportMode}&return=polyline,summary,passthrough&origin=${nhatui}&destination=${emartSupermarket}&via=${via}&apikey=${process.env.REST_API_KEY}`;
+    const url = `${process.env.routing_path}?transportMode=${transportMode}&return=polyline,summary,passthrough&origin=${nhatui}&destination=${emartSupermarket}&via=${via}&apikey=${process.env.REST_API_KEY}`;
     needle('get', url)
         .then(function (resp) {
             result(resp.body);
@@ -41,7 +41,7 @@ const cal_route_mulvia = (result,transportMode) => {
     if(!transportMode) {
         transportMode = 'car';
     }
-    const url = `https://router.hereapi.com/v8/routes?transportMode=${transportMode}&return=polyline,summary,passthrough&origin=${nhatui}&destination=${emartSupermarket}&via=${papaChicken_via}&via=${snobCoffee_via}&apikey=${process.env.REST_API_KEY}`
+    const url = `${process.env.routing_path}?transportMode=${transportMode}&return=polyline,summary,passthrough&origin=${nhatui}&destination=${emartSupermarket}&via=${papaChicken_via}&via=${snobCoffee_via}&apikey=${process.env.REST_API_KEY}`
     needle('get', url)
     .then(function (resp) {
         result(resp.body);
@@ -53,7 +53,7 @@ const cal_route_mulvia = (result,transportMode) => {
 
 const routeInstruction = (result) => {
     const transportMode = 'scooter'
-    const url = `https://router.hereapi.com/v8/routes?transportMode=${transportMode}&return=polyline,actions,instructions&origin=${nhatui}&destination=${emartSupermarket}&via=${snobCoffee_via}&lang=vi&apikey=${process.env.REST_API_KEY}`
+    const url = `${process.env.routing_path}?transportMode=${transportMode}&return=polyline,actions,instructions&origin=${nhatui}&destination=${emartSupermarket}&via=${snobCoffee_via}&lang=vi&apikey=${process.env.REST_API_KEY}`
     needle('get', url)
     .then(function (resp) {
         var sections =  resp.body.routes[0].sections
@@ -78,7 +78,7 @@ const routeInstruction = (result) => {
 
 const routeTurnbyturn = (result) => {
     const transportMode = 'scooter'
-    const url = `https://router.hereapi.com/v8/routes?transportMode=${transportMode}&return=polyline,turnbyturnactions&origin=${nhatui}&destination=${emartSupermarket}&apikey=${process.env.REST_API_KEY}`
+    const url = `${process.env.routing_path}?transportMode=${transportMode}&return=polyline,turnbyturnactions&origin=${nhatui}&destination=${emartSupermarket}&apikey=${process.env.REST_API_KEY}`
     needle('get', url)
     .then(function (resp) {
         result(resp.body);
