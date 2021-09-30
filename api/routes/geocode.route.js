@@ -9,6 +9,6 @@ router.get('/lookup', controller.lookUpById)
 router.get('/',controller.searchCoordinate)
 router.get('/autocomplete',controller.suggestion)
 router.get('/autosuggest', controller.autosuggest)
-
+router.get('/browse', controller.browse)
 
 module.exports = router;

@@ -1,8 +1,15 @@
 const needle = require('needle')
 const nhatui = '10.82397,106.68567';
 
-const discoverCoordinate = (result,coordinate = nhatui,categories = 'cafe,restaurant',country = 'VNM',limit = 3) => {
-    const url = `https://discover.search.hereapi.com/v1/discover?at=${coordinate}&limit=${limit}&q=${categories}&in=countryCode:${country}&apikey=${process.env.JS_API_KEY}`
+// For discover endpoint
+const discoverCoordinate = (result,coordinate , key_query ,limit = 3, circle = 'false' , radius) => {
+    var url = `${process.env.discover_path}discover`
+    if(circle === 'true' && radius) {
+        url = url.concat(`?in=circle:${coordinate}`).concat(`;r=${radius}`)
+    } else {
+        url = url.concat('?at=', coordinate)
+    }
+    url = url.concat('&q=', key_query).concat('&limit=', limit).concat('&apikey=', process.env.JS_API_KEY)
     needle('get', url)
     .then(function (resp) {
         result(resp.body);
@@ -34,8 +41,9 @@ const list_contact = (result) => {
     })
 }
 
+// For Lookup endpoint
 const lookUpById = (location_id,result) => {
-    const url = `https://lookup.search.hereapi.com/v1/lookup?id=${location_id}&apikey=${process.env.JS_API_KEY}`
+    const url = `${process.env.lookup_path}lookup?id=${location_id}&apikey=${process.env.JS_API_KEY}`
     needle('get', url)
     .then(function (resp) {
         result(resp.body);
@@ -45,8 +53,9 @@ const lookUpById = (location_id,result) => {
     });
 }
 
+// For Geocode endpoint
 const searchCoordinate = (address,result) => {
-    const url = `https://geocode.search.hereapi.com/v1/geocode?q=${address}&apikey=${process.env.JS_API_KEY}`
+    const url = `${process.env.geocode_path}geocode?q=${address}&apikey=${process.env.JS_API_KEY}`
     needle('get', url)
     .then(function (resp) {
         result(resp.body);
@@ -56,8 +65,9 @@ const searchCoordinate = (address,result) => {
     });
 }
 
+// For Autocompletement endpoint
 const suggestion = (key_query,result) => {
-    const url = `https://autocomplete.${process.env.geocode_path}autocomplete?q=${key_query}&lang=vi&apikey=${process.env.JS_API_KEY}`
+    const url = `${process.env.autocomplete_path}autocomplete?q=${key_query}&lang=vi&apikey=${process.env.JS_API_KEY}`
     needle('get', url)
     .then(function (resp) {
         result(resp.body);
@@ -67,8 +77,10 @@ const suggestion = (key_query,result) => {
     });
 }
 
+
+// For Autosuggestion endpoint
 const autoSuggest = (result,key_query,coordinate = nhatui) => {
-    const url = `https://autosuggest.${process.env.geocode_path}autosuggest?at=${coordinate}&q=${key_query}&lang=vi&limit=2&apikey=${process.env.JS_API_KEY}`
+    const url = `${process.env.autosuggest}autosuggest?at=${coordinate}&q=${key_query}&lang=vi&limit=2&apikey=${process.env.JS_API_KEY}`
     needle('get', url)
     .then(function (resp) {
         result(resp.body);
@@ -77,6 +89,37 @@ const autoSuggest = (result,key_query,coordinate = nhatui) => {
         console.log(err)
     });
 }
+
+// For browse endpoint
+const browse = (result,coordinate,categories,foodtype = undefined,limit = 3) => {
+    if(coordinate && categories) {
+        var url = `${process.env.browse_path}`
+        if(foodtype !== undefined && categories.indexOf('1000') !== -1 ) {
+            categories = categories.concat('&foodTypes=',foodtype)
+            coordinate = coordinate.concat('&categories=',categories)
+        } else {
+            coordinate = coordinate.concat('&categories=',categories)
+        }
+        
+        url = url
+        .concat('?at=',coordinate)
+        .concat('&limit=',limit)
+        .concat('&apikey=',process.env.JS_API_KEY)
+
+        needle('get', url)
+        .then(function (resp) {
+            result(resp.body);
+        })
+        .catch(function (err) {
+            result(err)
+        });
+    } else {
+        result(Error('Something went wrong'))
+        return;
+    }
+
+}
+
 
 module.exports = {
     discoverCoordinate,
@@ -84,5 +127,6 @@ module.exports = {
     lookUpById,
     searchCoordinate,
     suggestion,
-    autoSuggest
+    autoSuggest,
+    browse
 }

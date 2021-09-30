@@ -1,35 +1,40 @@
 const service = require('../services/geocode')
 
 const discoverCoordinate = (req,res) => {
-    if(req.query.location && req.query.categories) {
-        const coordinate = req.query.location
-        const categories = req.query.categories
-        const countryCode = req.query.country
-        if(req.query.limit) {
-            const limit = req.query.limit;
-            service.discoverCoordinate((data)=> {
+    const { location , key , circle , limit, r } = req.query;
+    if(location && key) {
+        if(circle && r && limit) {
+            service.discoverCoordinate((data) => {
                 res.json({data : data})
-            },coordinate,categories,countryCode,limit);
-            return
-        } else {
-            service.discoverCoordinate((data)=> {
+            }, location, key, limit , circle , r)
+        } else if (circle && r || limit) {
+            service.discoverCoordinate((data) => {
                 res.json({data : data})
-            },coordinate,categories,countryCode);
-            return;
+            }, location, key, 3 , circle , r)
+        } else if(circle && !r) {
+            res.json({message : 'Radius requested'})
+        }
+        else {
+            if(limit) {
+                service.discoverCoordinate((data) => {
+                    res.json({data : data})
+                }, location, key, limit)
+            } else {
+                service.discoverCoordinate((data) => {
+                    res.json({data : data})
+                }, location, key, 3)
+            }
         }
     } else {
-        service.discoverCoordinate((data)=> {
-            res.json({data : data})
-        });
+        res.json({message : 'Something went wrong'})
     }
 }
 
+
 const list_contact = (req,res) => {
-    if(req.query.location && req.query.categories) {
-        const coordinate = req.query.location
-        const categories = req.query.categories
-        const countryCode = req.query.country        
-        if(req.query.limit) {
+    const {location , key , limit , circle ,r} = req.query
+    if(location && key) {   
+        if(limit) {
             const limit = req.query.limit;
             service.discoverCoordinate((data)=> {
                 service.list_contact(data)
@@ -39,7 +44,7 @@ const list_contact = (req,res) => {
                     console.log(error)
                    res.json({message : error})
                 })
-            },coordinate,categories,countryCode,limit);
+            },location,key,limit);
             return;
         } else {
             service.discoverCoordinate((data)=> {
@@ -50,19 +55,11 @@ const list_contact = (req,res) => {
                     console.log(error)
                    res.json({message : error})
                 })
-            },coordinate,categories,countryCode);
+            },location,key);
             return;
         }
     } else {
-        service.discoverCoordinate((data)=> {
-            service.list_contact(data)
-            .then((items) => {
-               res.json({data : items})
-            },(error) => {
-                console.log(error)
-               res.json({message : error})
-            })
-        });
+        res.json({message : 'No location or key or both'})
     }
 }
 
@@ -102,11 +99,48 @@ const autosuggest = (req,res) => {
     
 }
 
+const browse = (req,res) => {
+    const { location , categories , foodtype , limit } = req.query;
+    if(location && categories) {
+        if(foodtype) {
+            if(limit) {
+                service.browse((data)=> {
+                    res.json({data : data})
+                },location,categories,foodtype,limit)
+                return;
+            } else {
+                service.browse((data)=> {
+                    res.json({data : data})
+                },location,categories,foodtype) 
+                return;
+            }
+        } else {
+            if(limit) {
+                service.browse((data)=> {
+                    res.json({data : data})
+                },location,categories,undefined,limit)
+                return;
+            } else {
+                service.browse((data)=> {
+                    res.json({data : data})
+                },location,categories)
+                return;
+            }
+        }
+    } else {
+        service.browse((data)=> {
+            res.json({data : data})
+        }) 
+    }
+
+}
+
 module.exports = {
     discoverCoordinate,
     list_contact,
     lookUpById,
     searchCoordinate,
     suggestion,
-    autosuggest
+    autosuggest,
+    browse
 }
